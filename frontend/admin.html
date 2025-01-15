@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Page Admin</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Raison Sociale</th>
+                <th>SIRET</th>
+                <th>Nom Gérant</th>
+                <th>Numéro</th>
+                <th>Email</th>
+                <th>PDL</th>
+                <th>PCE</th>
+                <th>Date Fin Engagement</th>
+                <th>Commentaires</th>
+                <th>Soumis Par</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="data-table">
+        </tbody>
+    </table>
+
+    <div id="edit-form-container" class="hidden">
+        <h2>Modifier les données</h2>
+        <form id="edit-form">
+            <label>ID :</label><input type="text" id="edit-id" disabled><br>
+            <label>Raison Sociale :</label><input type="text" id="edit-raison-sociale"><br>
+            <label>SIRET :</label><input type="text" id="edit-siret"><br>
+            <label>Nom Gérant :</label><input type="text" id="edit-nom-prenom-gerant"><br>
+            <label>Numéro :</label><input type="text" id="edit-num"><br>
+            <label>Email :</label><input type="email" id="edit-mail"><br>
+            <label>PDL :</label><input type="text" id="edit-pdl"><br>
+            <label>PCE :</label><input type="text" id="edit-pce"><br>
+            <label>Date Fin Engagement :</label><input type="date" id="edit-date-fin-engagement"><br>
+            <label>Commentaires :</label><textarea id="edit-commentaires"></textarea><br>
+            <button type="button" onclick="saveChanges()">Enregistrer</button>
+            <button type="button" onclick="hideEditForm()">Annuler</button>
+        </form>
+    </div>
+
+    <br>
+    <button onclick="exportExcel()">Exporter en Excel</button>
+    <button onclick="logout()">Déconnexion</button>
+
+    <script>
+        let currentEditId = null;
+
+        // Charger les données depuis l'API
+        fetch('/api/database')
+            .then(response => response.json())
+            .then(data => {
+                const dataTable = document.getElementById('data-table');
+                data.forEach(item => {
+                    const row = `
+                        <tr>
+                            <td>${item.id}</td>
+                            <td>${item.raison_sociale}</td>
+                            <td>${item.siret}</td>
+                            <td>${item.nom_prenom_gerant || ''}</td>
+                            <td>${item.num || ''}</td>
+                            <td>${item.mail || ''}</td>
+                            <td>${item.pdl || ''}</td>
+                            <td>${item.pce || ''}</td>
+                            <td>${item.date_fin_engagement || ''}</td>
+                            <td>${item.commentaires || ''}</td>
+                            <td>${item.submitted_by || 'Non spécifié'}</td>
+                            <td><button onclick="editRow(${item.id}, '${item.raison_sociale}', '${item.siret}', '${item.nom_prenom_gerant}', '${item.num}', '${item.mail}', '${item.pdl}', '${item.pce}', '${item.date_fin_engagement}', '${item.commentaires}')">Modifier</button></td>
+                        </tr>
+                    `;
+                    dataTable.innerHTML += row;
+                });
+            })
+            .catch(error => console.error('Erreur lors du chargement des données :', error));
+
+        // Afficher le formulaire de modification
+        function editRow(id, raisonSociale, siret, nomPrenomGerant, num, mail, pdl, pce, dateFinEngagement, commentaires) {
+            currentEditId = id;
+            document.getElementById('edit-id').value = id;
+            document.getElementById('edit-raison-sociale').value = raisonSociale;
+            document.getElementById('edit-siret').value = siret;
+            document.getElementById('edit-nom-prenom-gerant').value = nomPrenomGerant;
+            document.getElementById('edit-num').value = num;
+            document.getElementById('edit-mail').value = mail;
+            document.getElementById('edit-pdl').value = pdl;
+            document.getElementById('edit-pce').value = pce;
+            document.getElementById('edit-date-fin-engagement').value = dateFinEngagement;
+            document.getElementById('edit-commentaires').value = commentaires;
+            document.getElementById('edit-form-container').classList.remove('hidden');
+        }
+
+        // Cacher le formulaire de modification
+        function hideEditForm() {
+            document.getElementById('edit-form-container').classList.add('hidden');
+        }
+
+        // Enregistrer les modifications
+        function saveChanges() {
+            const updatedData = {
+                raison_sociale: document.getElementById('edit-raison-sociale').value,
+                siret: document.getElementById('edit-siret').value,
+                nom_prenom_gerant: document.getElementById('edit-nom-prenom-gerant').value,
+                num: document.getElementById('edit-num').value,
+                mail: document.getElementById('edit-mail').value,
+                pdl: document.getElementById('edit-pdl').value,
+                pce: document.getElementById('edit-pce').value,
+                date_fin_engagement: document.getElementById('edit-date-fin-engagement').value,
+                commentaires: document.getElementById('edit-commentaires').value,
+            };
+
+            fetch(`/api/update/${currentEditId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedData),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Données mises à jour avec succès');
+                        location.reload();
+                    } else {
+                        alert('Erreur lors de la mise à jour');
+                    }
+                })
+                .catch(error => console.error('Erreur réseau :', error));
+        }
+
+        // Fonction pour exporter en Excel
+        function exportExcel() {
+            window.location.href = '/api/export-excel';
+        }
+
+        // Fonction pour déconnecter
+        function logout() {
+            fetch('/logout', { method: 'POST' })
+                .then(() => {
+                    window.location.href = '/';
+                })
+                .catch(error => console.error('Erreur lors de la déconnexion :', error));
+        }
+    </script>
+</body>
+</html>

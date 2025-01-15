@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire</title>
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+    <h1>Formulaire</h1>
+    <form method="POST" action="/api/submit">
+        <label for="raison_sociale">Raison Sociale :</label>
+        <input type="text" id="raison_sociale" name="raison_sociale" required><br><br>
+
+        <label for="siret">SIRET :</label>
+        <input type="text" id="siret" name="siret" required><br><br>
+
+        <label for="nom_prenom_gerant">Nom et Prénom du Gérant :</label>
+        <input type="text" id="nom_prenom_gerant" name="nom_prenom_gerant" required><br><br>
+
+        <label for="num">Numéro :</label>
+        <input type="text" id="num" name="num" required><br><br>
+
+        <label for="mail">E-mail :</label>
+        <input type="email" id="mail" name="mail" required><br><br>
+
+        <label for="pdl">PDL (Élec) :</label>
+        <input type="text" id="pdl" name="pdl" required><br><br>
+
+        <label for="pce">PCE (Gaz) :</label>
+        <input type="text" id="pce" name="pce" required><br><br>
+
+        <label for="date_fin_engagement">Date de Fin d'Engagement :</label>
+        <input type="date" id="date_fin_engagement" name="date_fin_engagement" required><br><br>
+
+        <label for="commentaires">Commentaires :</label><br>
+        <textarea id="commentaires" name="commentaires"></textarea><br><br>
+
+        <button type="submit">Envoyer</button>
+    </form>
+    <form method="POST" action="/logout">
+        <button type="submit">Déconnexion</button>
+    </form>
+</body>
+</html>
