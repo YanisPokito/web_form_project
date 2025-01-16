@@ -1,20 +1,18 @@
-# Utiliser une image Node.js officielle (version LTS recommandée)
+# Utiliser une image Node.js officielle
 FROM node:16
 
 # Définir le répertoire de travail
 WORKDIR /app
 
-# Copier les fichiers package.json et package-lock.json pour installer les dépendances
-COPY package*.json ./
-
-# Installer les dépendances du projet
+# Copier les fichiers nécessaires
+COPY backend/package*.json ./
 RUN npm install
 
-# Copier tous les fichiers de l'application dans le conteneur
-COPY . .
+# Copier le reste des fichiers
+COPY backend ./
 
-# Exposer le port utilisé par votre application (assurez-vous que c'est bien 3000)
+# Exposer le port utilisé par l'application
 EXPOSE 3000
 
-# Définir la commande pour démarrer le serveur
-CMD ["npm", "start"]
+# Commande pour démarrer l'application
+CMD ["node", "server.js"]
