@@ -11,9 +11,9 @@ const port = 3000;
 
 // Configuration de la base de données
 const db = mysql.createConnection({
-    host: 'localhost',    // Adresse du serveur MySQL
-    user: 'root',         // Nom d'utilisateur MySQL
-    password: 'Aqwxsz38600@',         // Mot de passe MySQL (laisse vide si tu n'as pas défini de mot de passe)
+    host: 'postgresql://${{PGUSER}}:${{POSTGRES_PASSWORD}}@${{RAILWAY_TCP_PROXY_DOMAIN}}:${{RAILWAY_TCP_PROXY_PORT}}/${{PGDATABASE}}',    // Adresse du serveur MySQL
+    user: 'postgres',         // Nom d'utilisateur MySQL
+    password: 'MwLFEbBlhSgRgmpuQarMgWyjrvtqmgPE',         // Mot de passe MySQL (laisse vide si tu n'as pas défini de mot de passe)
     database: 'employe_form' // Remplace par le nom de ta base de données
 });
 
