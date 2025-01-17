@@ -4,7 +4,7 @@ FROM node:16
 WORKDIR /app
 
 # Copier les fichiers nécessaires
-COPY backend/package*.json ./
+COPY package*.json ./
 RUN npm install
 
 # Copier les autres fichiers du dossier backend
