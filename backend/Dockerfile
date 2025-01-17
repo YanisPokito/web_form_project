@@ -8,7 +8,7 @@ COPY package*.json ./
 RUN npm install
 
 # Copier les autres fichiers du dossier backend
-COPY backend ./
+COPY ./
 
 # Exposer le port
 EXPOSE 3000
