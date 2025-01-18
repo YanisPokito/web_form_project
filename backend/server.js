@@ -11,7 +11,7 @@ const port = 3000;
 
 // Configuration de la base de données
 const db = mysql.createConnection({
-    host: 'dpg-cu44forqf0us73b33bog-a',    // Adresse du serveur MySQL
+    host: 'postgresql://mydatabase_nny6_user:Chshn29qRzZfyLpdwNtZYcW1TUlHU1bS@dpg-cu44forqf0us73b33bog-a/mydatabase_nny6',    // Adresse du serveur MySQL
     user: 'mydatabase_nny6',         // Nom d'utilisateur MySQL
     password: 'Chshn29qRzZfyLpdwNtZYcW1TUlHU1bS',         // Mot de passe MySQL (laisse vide si tu n'as pas défini de mot de passe)
     database: 'mydatabase' // Remplace par le nom de ta base de données
