@@ -11,10 +11,10 @@ const port = 3000;
 
 // Configuration de la base de données
 const db = mysql.createConnection({
-    host: 'postgresql://mydatabase_nny6_user:Chshn29qRzZfyLpdwNtZYcW1TUlHU1bS@dpg-cu44forqf0us73b33bog-a/mydatabase_nny6',    // Adresse du serveur MySQL
-    user: 'mydatabase_nny6_user',         // Nom d'utilisateur MySQL
-    password: 'Chshn29qRzZfyLpdwNtZYcW1TUlHU1bS',         // Mot de passe MySQL (laisse vide si tu n'as pas défini de mot de passe)
-    database: 'dpg-cu44forqf0us73b33bog-a' // Remplace par le nom de ta base de données
+    host: 'mysql.railway.internal',    // Adresse du serveur MySQL
+    user: 'root',         // Nom d'utilisateur MySQL
+    password: 'HvCdyhYDZlSNcqudKOerfffHmsPXhirj',         // Mot de passe MySQL (laisse vide si tu n'as pas défini de mot de passe)
+    database: 'Mysql' // Remplace par le nom de ta base de données
 });
 
 // Connexion à la base de données
