@@ -15,7 +15,8 @@ const db = mysql.createConnection({
     port: '3306',
     user: 'root',         // Nom d'utilisateur MySQL
     password: 'HvCdyhYDZlSNcqudKOerfffHmsPXhirj',         // Mot de passe MySQL (laisse vide si tu n'as pas défini de mot de passe)
-    database: 'employe_form' // Remplace par le nom de ta base de données
+    database: 'employe_form', // Remplace par le nom de ta base de données
+    connectTimeout: 1000000
 });
 
 // Connexion à la base de données
