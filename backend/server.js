@@ -11,10 +11,11 @@ const port = 3000;
 
 // Configuration de la base de données
 const db = mysql.createConnection({
-    host: 'mysql.railway.internal',    // Adresse du serveur MySQL
+    host: 'mysql://root:HvCdyhYDZlSNcqudKOerfffHmsPXhirj@junction.proxy.rlwy.net:54829/railway',    // Adresse du serveur MySQL
+    port: '3306',
     user: 'root',         // Nom d'utilisateur MySQL
     password: 'HvCdyhYDZlSNcqudKOerfffHmsPXhirj',         // Mot de passe MySQL (laisse vide si tu n'as pas défini de mot de passe)
-    database: 'Mysql' // Remplace par le nom de ta base de données
+    database: 'employe_form' // Remplace par le nom de ta base de données
 });
 
 // Connexion à la base de données
