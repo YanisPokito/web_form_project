@@ -10,22 +10,24 @@ const app = express();
 const port = 3000;
 
 // Configuration de la base de données
-const db = mysql.createConnection({
-    host: 'mysql://root:HvCdyhYDZlSNcqudKOerfffHmsPXhirj@junction.proxy.rlwy.net:54829/railway',    // Adresse du serveur MySQL
-    port: '3306',
-    user: 'root',         // Nom d'utilisateur MySQL
-    password: 'HvCdyhYDZlSNcqudKOerfffHmsPXhirj',         // Mot de passe MySQL (laisse vide si tu n'as pas défini de mot de passe)
-    database: 'employe_form' // Remplace par le nom de ta base de données
-});
+const mysql = require('mysql2');
 
-// Connexion à la base de données
+// Récupérer l'URL de connexion MySQL depuis les variables d'environnement
+const dbUrl = process.env.MYSQL_URL || 'mysql://root:HvCdyhYDZlSNcqudKOerfffHmsPXhirj@mysql.railway.internal:3306/railway';
+
+// Créer une connexion MySQL
+const db = mysql.createConnection(dbUrl);
+
+// Tester la connexion
 db.connect(err => {
     if (err) {
         console.error('Erreur de connexion à la base de données :', err);
-        return;
+        process.exit(1); // Arrêter l'application en cas d'erreur
     }
     console.log('Connecté à la base de données MySQL');
 });
+
+module.exports = db;
 
 // Configuration des middlewares
 app.use(bodyParser.urlencoded({ extended: true })); // Pour lire les données des formulaires
