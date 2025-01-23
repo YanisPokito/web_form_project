@@ -13,9 +13,7 @@ COPY backend ./
 WORKDIR /app/frontend
 
 # Copier les fichiers du frontend
-COPY frontend/package.json ./
-RUN npm install
-COPY frontend ./
+
 
 # Revenir au répertoire backend pour démarrer le serveur
 WORKDIR /app/backend
