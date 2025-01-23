@@ -13,7 +13,9 @@ COPY backend ./
 WORKDIR /app/frontend
 
 # Copier les fichiers du frontend
-
+# Copier les fichiers frontend
+WORKDIR /app
+COPY frontend/. ./frontend
 
 # Revenir au répertoire backend pour démarrer le serveur
 WORKDIR /app/backend
