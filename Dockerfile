@@ -5,7 +5,7 @@ FROM node:16
 WORKDIR /app/backend
 
 # Copier les fichiers du backend
-COPY backend/package*.json ./
+COPY backend/package.json ./
 RUN npm install
 COPY backend ./
 
@@ -13,7 +13,7 @@ COPY backend ./
 WORKDIR /app/frontend
 
 # Copier les fichiers du frontend
-COPY frontend/package*.json ./
+COPY frontend/package.json ./
 RUN npm install
 COPY frontend ./
 
