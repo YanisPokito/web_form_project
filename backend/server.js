@@ -10,7 +10,6 @@ const app = express();
 const port = 3000;
 
 // Configuration de la base de données
-const mysql = require('mysql2');
 
 // Récupérer l'URL de connexion MySQL depuis les variables d'environnement
 const dbUrl = process.env.MYSQL_URL || 'mysql://root:HvCdyhYDZlSNcqudKOerfffHmsPXhirj@mysql.railway.internal:3306/railway';
