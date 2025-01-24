@@ -48,6 +48,9 @@
             <label>Email :</label><input type="email" id="edit-mail"><br>
             <label>PDL :</label><input type="text" id="edit-pdl"><br>
             <label>PCE :</label><input type="text" id="edit-pce"><br>
+            <label>Consommation Gaz :</label><input type="text" id="edit-consommation_gaz"><br>
+            <label>Consommation Electricite :</label><input type="text" id="edit-consommation_electricite"><br>
+            <label>Commission :</label><input type="text" id="edit-Commission"><br>
             <label>Date Fin Engagement :</label><input type="date" id="edit-date-fin-engagement"><br>
             <label>Commentaires :</label><textarea id="edit-commentaires"></textarea><br>
             <button type="button" onclick="saveChanges()">Enregistrer</button>
@@ -78,10 +81,13 @@
                             <td>${item.mail || ''}</td>
                             <td>${item.pdl || ''}</td>
                             <td>${item.pce || ''}</td>
+                            <td>${item.consommation_gaz || ''}</td>
+                            <td>${item.consommation_electricite || ''}</td>
+                            <td>${item.Commission || ''}</td>
                             <td>${item.date_fin_engagement || ''}</td>
                             <td>${item.commentaires || ''}</td>
                             <td>${item.submitted_by || 'Non spécifié'}</td>
-                            <td><button onclick="editRow(${item.id}, '${item.raison_sociale}', '${item.siret}', '${item.nom_prenom_gerant}', '${item.num}', '${item.mail}', '${item.pdl}', '${item.pce}', '${item.date_fin_engagement}', '${item.commentaires}')">Modifier</button></td>
+                            <td><button onclick="editRow(${item.id}, '${item.raison_sociale}', '${item.siret}', '${item.nom_prenom_gerant}', '${item.num}', '${item.mail}', '${item.pdl}', '${item.pce}', '${item.consommation_gaz}', '${item.consommation_electricite}', '${item.Commission}', '${item.date_fin_engagement}', '${item.commentaires}')">Modifier</button></td>
                         </tr>
                     `;
                     dataTable.innerHTML += row;
