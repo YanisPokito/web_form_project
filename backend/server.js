@@ -46,7 +46,20 @@ const users = [
     { username: 'OmerBascesme', password: 'Omer38130', role: 'admin' }
 ];
 
+const multer = require('multer');
+const path = require('path');
 
+// Configuration de multer pour enregistrer les fichiers
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/'); // Dossier où stocker les fichiers
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname)); // Renommer le fichier
+    }
+});
+
+const upload = multer({ storage });
 // Middleware pour servir les fichiers statiques du dossier frontend
 app.use(express.static(path.join(__dirname, '../frontend')));
 
@@ -94,7 +107,7 @@ app.post('/logout', (req, res) => {
 });
 
 // Route pour soumettre un formulaire
-app.post('/api/submit', (req, res) => {
+app.post('/api/submit', upload.single('piece_jointe'), (req, res) => {
     if (!req.session.loggedIn || req.session.role !== 'user') {
         return res.status(403).send('Non autorisé');
     }
@@ -111,12 +124,14 @@ app.post('/api/submit', (req, res) => {
         commentaires
     } = req.body;
 
+    const pieceJointePath = req.file ? req.file.filename : null; // Chemin du fichier
+    
     const submittedBy = req.session.username;
 
     const query = `
         INSERT INTO employes
         (raison_sociale, siret, nom_prenom_gerant, num, mail, pdl, pce, date_fin_engagement, commentaires, submitted_by, consommation_gaz, consommation_electricite, Commission)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
     const values = [
         raison_sociale,
@@ -131,7 +146,8 @@ app.post('/api/submit', (req, res) => {
         submittedBy,
         consommation_gaz,
         consommation_electricite,
-        Commission
+        Commission,
+        pieceJointePath
     ];
 
     db.query(query, values, (err, result) => {
