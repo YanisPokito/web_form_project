@@ -48,17 +48,26 @@ const users = [
 
 const multer = require('multer');
 
-// Configuration de multer pour enregistrer les fichiers
+// Configuration de l'upload
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/'); // Dossier où stocker les fichiers
+        cb(null, 'uploads'); // Répertoire cible
     },
     filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname)); // Renommer le fichier
+        cb(null, Date.now() + path.extname(file.originalname)); // Nom unique pour le fichier
     }
 });
 
 const upload = multer({ storage });
+
+// Route d'upload
+app.post('/upload', upload.single('file'), (req, res) => {
+    if (!req.file) {
+        return res.status(400).send('Aucun fichier uploadé');
+    }
+    res.send('Fichier uploadé avec succès');
+});
+
 // Middleware pour servir les fichiers statiques du dossier frontend
 app.use(express.static(path.join(__dirname, '../frontend')));
 
