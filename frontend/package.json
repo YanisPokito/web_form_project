@@ -1,0 +1,16 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "description": "Frontend for the application",
+  "main": "index.html",
+  "scripts": {
+    "start": "live-server --port=8080", 
+    "build": "echo 'No build step defined'"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}
