@@ -1,26 +1,33 @@
 # Utiliser une image officielle de Node.js
 FROM node:16
 
-# Définir le répertoire de travail pour le backend
-WORKDIR /app/backend
-
-# Copier les fichiers du backend
-COPY backend/package.json ./
-RUN npm install
-COPY backend ./
-
-# Définir le répertoire de travail pour le frontend
-WORKDIR /app/frontend
-
-# Copier les fichiers du frontend
-# Copier les fichiers frontend
+# Définir le répertoire de travail pour l'application
 WORKDIR /app
-COPY frontend/. ./frontend
+
+# Copier les fichiers package.json et package-lock.json du backend
+COPY backend/package*.json ./backend/
+
+# Installer les dépendances du backend
+WORKDIR /app/backend
+RUN npm install
+
+# Copier les autres fichiers du backend
+COPY backend/ ./
+
+# Copier les fichiers package.json et package-lock.json du frontend
+WORKDIR /app/frontend
+COPY frontend/package*.json ./
+
+# Installer les dépendances du frontend
+RUN npm install
+
+# Copier les autres fichiers du frontend
+COPY frontend/ ./
 
 # Revenir au répertoire backend pour démarrer le serveur
 WORKDIR /app/backend
 
-# Exposer le port sur lequel l'application s'exécute
+# Exposer le port de l'application
 EXPOSE 3000
 
 # Commande pour démarrer le serveur backend
