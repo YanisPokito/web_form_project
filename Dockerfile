@@ -5,7 +5,7 @@ FROM node:16
 WORKDIR /app
 
 # Copier les fichiers package.json et package-lock.json du backend
-COPY backend/package*.json ./backend/
+COPY backend/package.json ./backend/
 
 # Installer les dépendances du backend
 WORKDIR /app/backend
@@ -16,7 +16,7 @@ COPY backend/ ./
 
 # Copier les fichiers package.json et package-lock.json du frontend
 WORKDIR /app/frontend
-COPY frontend/package*.json ./
+COPY frontend/package.json ./
 
 # Installer les dépendances du frontend
 RUN npm install
