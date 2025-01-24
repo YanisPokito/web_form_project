@@ -115,8 +115,8 @@ app.post('/api/submit', (req, res) => {
 
     const query = `
         INSERT INTO employes
-        (raison_sociale, siret, nom_prenom_gerant, num, mail, pdl, pce, date_fin_engagement, commentaires, submitted_by)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        (raison_sociale, siret, nom_prenom_gerant, num, mail, pdl, pce, date_fin_engagement, commentaires, submitted_by, consommation_gaz, consommation_electricite, Commission)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
     const values = [
         raison_sociale,
@@ -128,7 +128,10 @@ app.post('/api/submit', (req, res) => {
         pce,
         date_fin_engagement,
         commentaires,
-        submittedBy
+        submittedBy,
+        consommation_gaz,
+        consommation_electricite,
+        Commission
     ];
 
     db.query(query, values, (err, result) => {
@@ -181,7 +184,10 @@ app.put('/api/update/:id', (req, res) => {
         pdl,
         pce,
         date_fin_engagement,
-        commentaires
+        commentaires,
+        consommation_gaz,
+        consommation_electricite,
+        Commission
     } = req.body;
 
     // Fetch the current data if date_fin_engagement is not provided
@@ -196,10 +202,10 @@ app.put('/api/update/:id', (req, res) => {
 
         const query = `
             UPDATE employes
-            SET raison_sociale = ?, siret = ?, nom_prenom_gerant = ?, num = ?, mail = ?, pdl = ?, pce = ?, date_fin_engagement = ?, commentaires = ?
+            SET raison_sociale = ?, siret = ?, nom_prenom_gerant = ?, num = ?, mail = ?, pdl = ?, pce = ?, date_fin_engagement = ?, commentaires = ?, consommation_gaz = ?, consommation_electricite = ?, Commission = ? 
             WHERE id = ?
         `;
-        const values = [raison_sociale, siret, nom_prenom_gerant, num, mail, pdl, pce, updatedDateFinEngagement, commentaires, id];
+        const values = [raison_sociale, siret, nom_prenom_gerant, num, mail, pdl, pce, updatedDateFinEngagement, commentaires, consommation_gaz, consommation_electricite, Commission, id];
 
         db.query(query, values, (err, result) => {
             if (err) {
@@ -233,6 +239,9 @@ app.get('/api/export-excel', (req, res) => {
             { header: 'PDL', key: 'pdl', width: 15 },
             { header: 'PCE', key: 'pce', width: 15 },
             { header: 'Date Fin Engagement', key: 'date_fin_engagement', width: 20, style: { numFmt: 'DD/MM/YYYY' } },
+            { header: 'Consommation Gaz', key: 'consommation_gaz', width: 15 },
+            { header: 'Consonmmation électricité', key: 'consommation_electricite', width: 15 },
+            { header: 'Commission', key: 'Commission', width: 15 },
             { header: 'Commentaires', key: 'commentaires', width: 40 },
             { header: 'Soumis Par', key: 'submitted_by', width: 20 },
         ];
