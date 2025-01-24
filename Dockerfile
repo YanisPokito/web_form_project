@@ -6,7 +6,7 @@ WORKDIR /app/backend
 
 # Copier les fichiers du backend
 COPY backend/package.json ./
-RUN npm install --verbose
+RUN npm install
 COPY backend ./
 
 # Définir le répertoire de travail pour le frontend
