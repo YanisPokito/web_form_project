@@ -40,10 +40,10 @@ app.use(session({
 // Utilisateurs avec rôles
 const users = [
     { username: 'admin', password: 'admin38130', role: 'admin' },
-    { username: 'NusretinNAZIFOV', password: 'Nusret38@', role: 'user' },
+    { username: 'NusretinNAZIFOV', password: 'Nusret38@', role: 'admin' },
     { username: 'GeraldDelConsole', password: 'gerald38', role: 'user' },
     { username: 'RobinMalandain', password: 'Robin73', role: 'user' },
-    { username: 'OmerBascesme', password: 'Omer38130', role: 'user' }
+    { username: 'OmerBascesme', password: 'Omer38130', role: 'admin' }
 ];
 
 
