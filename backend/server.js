@@ -125,11 +125,12 @@ app.post('/logout', (req, res) => {
 });
 
 // Route pour soumettre un formulaire
-app.post('/api/submit', upload.single('piece_jointe'), (req, res) => {
+app.post('/api/submit', upload.single('file'), (req, res) => {
     if (!req.session.loggedIn || req.session.role !== 'user') {
         return res.status(403).send('Non autorisé');
     }
 
+    // Récupérer les données depuis le formulaire
     const {
         raison_sociale,
         siret,
@@ -138,49 +139,51 @@ app.post('/api/submit', upload.single('piece_jointe'), (req, res) => {
         mail,
         pdl,
         pce,
+        date_fin_engagement,
+        commentaires,
         consommation_gaz,
         consommation_electricite,
-        commission,
-        date_fin_engagement,
-        fichier,
-        commentaires
+        Commission
     } = req.body;
 
-    const pieceJointePath = req.file ? req.file.filename : null; // Chemin du fichier
-    
-    const submittedBy = req.session.username;
+    // Récupérer le nom d'utilisateur depuis la session
+    const submitted_by = req.session.username; // Ajout de la variable manquante
 
+    // Récupérer le fichier uploadé
+    const fichier = req.file ? req.file.filename : null;
+
+    // Requête SQL pour insérer les données dans la base
     const query = `
-    INSERT INTO employes
-    (raison_sociale, siret, nom_prenom_gerant, num, mail, pdl, pce, date_fin_engagement, submitted_by, consommation_gaz, consommation_electricite, Commission, fichier, commentaires)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-`;
+        INSERT INTO employes
+        (raison_sociale, siret, nom_prenom_gerant, num, mail, pdl, pce, date_fin_engagement, submitted_by, consommation_gaz, consommation_electricite, Commission, fichier, commentaires)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
 
-const values = [
-    raison_sociale,
-    siret,
-    nom_prenom_gerant,
-    num,
-    mail,
-    pdl,
-    pce,
-    date_fin_engagement,
-    submitted_by,
-    consommation_gaz,
-    consommation_electricite,
-    Commission,
-    req.file?.filename || null, // Nom du fichier ou NULL
-    commentaires
-];
+    const values = [
+        raison_sociale,
+        siret,
+        nom_prenom_gerant,
+        num,
+        mail,
+        pdl,
+        pce,
+        date_fin_engagement,
+        submitted_by,
+        consommation_gaz,
+        consommation_electricite,
+        Commission,
+        fichier,
+        commentaires
+    ];
 
-db.query(query, values, (err, result) => {
-    if (err) {
-        console.error('Erreur lors de l\'insertion des données :', err);
-        return res.status(500).send('Erreur lors de l\'insertion des données');
-    }
-    res.status(200).send('Données insérées avec succès');
-});
-
+    // Exécution de la requête SQL
+    db.query(query, values, (err, result) => {
+        if (err) {
+            console.error('Erreur lors de l\'insertion des données :', err);
+            return res.status(500).send('Erreur lors de l\'insertion des données');
+        }
+        res.status(200).send('Données insérées avec succès');
+    });
 });
 
 // Route pour afficher les données de la base (admin uniquement)
