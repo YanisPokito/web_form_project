@@ -78,7 +78,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
     res.send(`Fichier ${req.file.filename} uploadé avec succès`);
 });
 
-});// Middleware pour servir les fichiers statiques du dossier frontend
+// Middleware pour servir les fichiers statiques du dossier frontend
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Route pour la page de connexion
