@@ -45,16 +45,24 @@ const users = [
     { username: 'RobinMalandain', password: 'Robin73', role: 'user' },
     { username: 'OmerBascesme', password: 'Omer38130', role: 'admin' }
 ];
-
+const fs = require('fs');
 const multer = require('multer');
+// Répertoire temporaire pour les uploads
+const uploadsDir = path.join('/tmp', 'uploads');
 
-// Configuration de l'upload
+// Vérifiez si le répertoire existe, sinon créez-le
+if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir);
+    console.log('Répertoire temporaire créé :', uploadsDir);
+}
+
+// Configuration de l'upload avec Multer
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads'); // Répertoire cible
+        cb(null, uploadsDir); // Répertoire cible (correctement défini ici)
     },
     filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname)); // Nom unique pour le fichier
+        cb(null, Date.now() + path.extname(file.originalname)); // Nom unique pour chaque fichier
     }
 });
 
@@ -65,10 +73,9 @@ app.post('/upload', upload.single('file'), (req, res) => {
     if (!req.file) {
         return res.status(400).send('Aucun fichier uploadé');
     }
-    res.send('Fichier uploadé avec succès');
-});
-
-// Middleware pour servir les fichiers statiques du dossier frontend
+    console.log('Fichier uploadé :', req.file);
+    res.send(`Fichier ${req.file.filename} uploadé avec succès`);
+});// Middleware pour servir les fichiers statiques du dossier frontend
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Route pour la page de connexion
