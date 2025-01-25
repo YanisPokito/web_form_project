@@ -135,6 +135,9 @@ app.post('/api/submit', upload.single('piece_jointe'), (req, res) => {
         mail,
         pdl,
         pce,
+        consommation_gaz,
+        consommation_electricite,
+        Commission,
         date_fin_engagement,
         commentaires
     } = req.body;
