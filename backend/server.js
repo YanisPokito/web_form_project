@@ -45,8 +45,9 @@ const users = [
     { username: 'RobinMalandain', password: 'Robin73', role: 'user' },
     { username: 'OmerBascesme', password: 'Omer38130', role: 'admin' }
 ];
-const fs = require('fs');
 const multer = require('multer');
+const fs = require('fs');
+
 // Répertoire temporaire pour les uploads
 const uploadsDir = path.join('/tmp', 'uploads');
 
@@ -75,6 +76,8 @@ app.post('/upload', upload.single('file'), (req, res) => {
     }
     console.log('Fichier uploadé :', req.file);
     res.send(`Fichier ${req.file.filename} uploadé avec succès`);
+});
+
 });// Middleware pour servir les fichiers statiques du dossier frontend
 app.use(express.static(path.join(__dirname, '../frontend')));
 
