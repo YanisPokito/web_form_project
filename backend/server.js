@@ -127,7 +127,7 @@ app.post('/logout', (req, res) => {
 });
 
 // Route pour soumettre un formulaire
-app.post('/api/submit', upload.single('file'), (req, res) => {
+app.post('/api/submit', upload.fields(), (req, res) => {
     if (!req.session.loggedIn || req.session.role !== 'user') {
         return res.status(403).send('Non autorisé');
     }
