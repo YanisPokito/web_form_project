@@ -151,36 +151,36 @@ app.post('/api/submit', upload.single('piece_jointe'), (req, res) => {
     const submittedBy = req.session.username;
 
     const query = `
-        INSERT INTO employes
-        (raison_sociale, siret, nom_prenom_gerant, num, mail, pdl, pce, date_fin_engagement, submitted_by, consommation_gaz, consommation_electricite, Commission, fichier, commentaires)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `;
-    const values = [
-        raison_sociale,
-        siret,
-        nom_prenom_gerant,
-        num,
-        mail,
-        pdl,
-        pce,
-        date_fin_engagement,
-        submittedBy,
-        consommation_gaz,
-        consommation_electricite,
-        commission,
-        pieceJointePath,
-        commentaires
-    ];
+    INSERT INTO employes
+    (raison_sociale, siret, nom_prenom_gerant, num, mail, pdl, pce, date_fin_engagement, submitted_by, consommation_gaz, consommation_electricite, Commission, fichier, commentaires)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+`;
 
-    db.query(query, values, (err, result) => {
-        if (err) {
-            console.error('Erreur lors de l\'insertion des données :', err);
-            return res.status(500).send('Erreur lors de l\'insertion des données');
-        }
+const values = [
+    raison_sociale,
+    siret,
+    nom_prenom_gerant,
+    num,
+    mail,
+    pdl,
+    pce,
+    date_fin_engagement,
+    submitted_by,
+    consommation_gaz,
+    consommation_electricite,
+    Commission,
+    req.file?.filename || null, // Nom du fichier ou NULL
+    commentaires
+];
 
-        console.log(`Formulaire soumis avec succès par : ${submittedBy}`);
-        res.status(200).send('Formulaire soumis avec succès');
-    });
+db.query(query, values, (err, result) => {
+    if (err) {
+        console.error('Erreur lors de l\'insertion des données :', err);
+        return res.status(500).send('Erreur lors de l\'insertion des données');
+    }
+    res.status(200).send('Données insérées avec succès');
+});
+
 });
 
 // Route pour afficher les données de la base (admin uniquement)
