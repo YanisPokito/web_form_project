@@ -140,7 +140,7 @@ app.post('/api/submit', upload.single('piece_jointe'), (req, res) => {
         pce,
         consommation_gaz,
         consommation_electricite,
-        Commission,
+        commission,
         date_fin_engagement,
         fichier,
         commentaires
