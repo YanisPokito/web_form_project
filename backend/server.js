@@ -68,17 +68,29 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({
-    storage: storage
-}).fields([
-    { name: 'file', maxCount: 1 }, // Champ pour un fichier unique
-    { name: 'another_field', maxCount: 1 } // Autre champ
-]);
-
-// Route d'upload
-app.post('/api/submit', upload, (req, res) => {
-    console.log(req.files); // Contiendra les fichiers uploadés
-    res.send('Données et fichiers reçus');
+    storage: multer.diskStorage({
+        destination: (req, file, cb) => {
+            cb(null, 'uploads'); // Répertoire cible
+        },
+        filename: (req, file, cb) => {
+            cb(null, Date.now() + '-' + file.originalname); // Nom unique pour chaque fichier
+        }
+    })
 });
+
+app.post(
+    '/api/submit',
+    upload.fields([
+        { name: 'file', maxCount: 1 }, // Champ pour un fichier unique
+        { name: 'anotherField', maxCount: 1 } // Un autre champ, optionnel
+    ]),
+    (req, res) => {
+        console.log(req.files); // Tous les fichiers uploadés
+        console.log(req.body); // Données supplémentaires
+        res.send('Fichiers et données reçus');
+    }
+);
+
 
 // Middleware pour servir les fichiers statiques du dossier frontend
 app.use(express.static(path.join(__dirname, '../frontend')));
