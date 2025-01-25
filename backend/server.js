@@ -167,7 +167,7 @@ app.post('/api/submit', upload.single('piece_jointe'), (req, res) => {
         submittedBy,
         consommation_gaz,
         consommation_electricite,
-        Commission,
+        commission,
         pieceJointePath,
         commentaires
     ];
