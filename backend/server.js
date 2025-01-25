@@ -142,6 +142,7 @@ app.post('/api/submit', upload.single('piece_jointe'), (req, res) => {
         consommation_electricite,
         Commission,
         date_fin_engagement,
+        fichier,
         commentaires
     } = req.body;
 
@@ -151,8 +152,8 @@ app.post('/api/submit', upload.single('piece_jointe'), (req, res) => {
 
     const query = `
         INSERT INTO employes
-        (raison_sociale, siret, nom_prenom_gerant, num, mail, pdl, pce, date_fin_engagement, commentaires, submitted_by, consommation_gaz, consommation_electricite, Commission)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        (raison_sociale, siret, nom_prenom_gerant, num, mail, pdl, pce, date_fin_engagement, commentaires, submitted_by, consommation_gaz, consommation_electricite, Commission, fichier)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
     const values = [
         raison_sociale,
@@ -168,6 +169,7 @@ app.post('/api/submit', upload.single('piece_jointe'), (req, res) => {
         consommation_gaz,
         consommation_electricite,
         Commission,
+        fichier,
         pieceJointePath
     ];
 
