@@ -145,30 +145,31 @@ app.post('/api/submit', upload.single('file'), (req, res) => {
     } = req.body;
 
     const submitted_by = req.session.username; // Utilisateur connecté
-    const fichier = req.file ? req.file.filename : null; // Nom du fichier uploadé
+const fichier = req.file ? req.file.filename : null; // Nom du fichier uploadé
 
-    const query = `
-        INSERT INTO employes (
-            raison_sociale, siret, nom_prenom_gerant, num, mail, pdl, pce, 
-            date_fin_engagement, commentaires, submitted_by, 
-            consommation_gaz, consommation_electricite, Commission, fichier
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `;
-    const values = [
-        raison_sociale, siret, nom_prenom_gerant, num, mail, pdl, pce,
-        date_fin_engagement, commentaires, submitted_by,
+const query = `
+    INSERT INTO employes (
+        raison_sociale, siret, nom_prenom_gerant, num, mail, pdl, pce, 
+        date_fin_engagement, commentaires, submitted_by, 
         consommation_gaz, consommation_electricite, Commission, fichier
-    ];
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+`;
 
-    db.query(query, values, (err, result) => {
-        if (err) {
-            console.error('Erreur lors de l\'insertion des données :', err);
-            return res.status(500).send('Erreur lors de l\'insertion des données');
-        }
+const values = [
+    raison_sociale, siret, nom_prenom_gerant, num, mail, pdl, pce,
+    date_fin_engagement, commentaires, submitted_by,
+    consommation_gaz, consommation_electricite, Commission, fichier
+];
 
-        console.log('Formulaire inséré avec succès :', result);
-        res.status(200).send('Formulaire soumis avec succès');
-    });
+// Exécution de la requête SQL
+db.query(query, values, (err, result) => {
+    if (err) {
+        console.error('Erreur lors de l\'insertion des données :', err);
+        return res.status(500).send('Erreur lors de l\'insertion des données');
+    }
+
+    console.log(`Formulaire soumis avec succès par : ${submitted_by}`);
+    res.status(200).send('Formulaire soumis avec succès');
 });
 
 
