@@ -173,12 +173,14 @@ app.post('/api/submit', upload.single('file'), (req, res) => {
 
 
     // Exécution de la requête SQL
-    db.query(query, values, (err, result) => {
+   db.query(query, values, (err, result) => {
         if (err) {
             console.error('Erreur lors de l\'insertion des données :', err);
             return res.status(500).send('Erreur lors de l\'insertion des données');
         }
-        res.status(200).send('Données insérées avec succès');
+
+        console.log(`Formulaire soumis avec succès par : ${submitted_by}`);
+        res.status(200).send('Formulaire soumis avec succès');
     });
 
 
