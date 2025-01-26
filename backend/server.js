@@ -47,8 +47,6 @@ const users = [
 ];
 const multer = require('multer');
 const fs = require('fs');
-const path = require('path');
-
 // Répertoire cible
 const uploadDir = path.join(__dirname, 'uploads');
 
