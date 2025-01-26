@@ -282,6 +282,7 @@ app.put('/api/update/:id', upload.single('file'), (req, res) => {
         console.log(`Données mises à jour pour l'ID ${id} :`, result);
         res.status(200).send('Mise à jour réussie');
     });
+    });
 });
 // Route pour exporter les données en Excel
 app.get('/api/export-excel', (req, res) => {
