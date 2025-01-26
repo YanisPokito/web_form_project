@@ -128,6 +128,7 @@ app.post('/logout', (req, res) => {
 });
 
 // Route pour soumettre un formulaire
+
 app.post('/api/submit', upload.single('file'), (req, res) => {
     try {
         const {
@@ -196,8 +197,9 @@ app.post('/api/submit', upload.single('file'), (req, res) => {
             fichier
         ];
 
-        console.log('Requête SQL :', query);
-        console.log('Valeurs SQL :', values);
+        console.log('Exécution de la requête SQL...');
+console.log('Requête SQL :', query);
+console.log('Valeurs SQL :', values);
         // Exécution de la requête SQL
         db.query(query, values, (err, result) => {
             if (err) {
