@@ -161,30 +161,21 @@ const values = [
     consommation_gaz, consommation_electricite, Commission, fichier
 ];
 
-// Exécution de la requête SQL
-db.query(query, values, (err, result) => {
-    if (err) {
-        console.error('Erreur lors de l\'insertion des données :', err);
-        return res.status(500).send('Erreur lors de l\'insertion des données');
+        // Exécution de la requête SQL
+        db.query(query, values, (err, result) => {
+            if (err) {
+                console.error('Erreur lors de l\'insertion des données dans la base :', err);
+                return res.status(500).send('Erreur lors de l\'insertion des données');
+            }
+
+            console.log('Formulaire inséré avec succès dans la base :', result);
+            res.status(200).send('Formulaire soumis avec succès');
+        });
+    } catch (error) {
+        console.error('Erreur dans le traitement du formulaire :', error);
+        res.status(500).send('Erreur interne du serveur');
     }
-
-    console.log(`Formulaire soumis avec succès par : ${submitted_by}`);
-    res.status(200).send('Formulaire soumis avec succès');
 });
-
-
-    // Exécution de la requête SQL
-   db.query(query, values, (err, result) => {
-        if (err) {
-            console.error('Erreur lors de l\'insertion des données :', err);
-            return res.status(500).send('Erreur lors de l\'insertion des données');
-        }
-
-        console.log(`Formulaire soumis avec succès par : ${submitted_by}`);
-        res.status(200).send('Formulaire soumis avec succès');
-    });
-});
-
 // Route pour afficher les données de la base (admin uniquement)
 app.get('/api/database', (req, res) => {
     if (!req.session.loggedIn || req.session.role !== 'admin') {
