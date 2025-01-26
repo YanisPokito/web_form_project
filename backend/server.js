@@ -143,8 +143,8 @@ app.post('/api/submit', upload.single('file'), (req, res) => {
         consommation_electricite,
         Commission
     } = req.body;
-})
-    const submitted_by = req.session.username; // Utilisateur connecté
+});
+const submitted_by = req.session.username; // Utilisateur connecté
 const fichier = req.file ? req.file.filename : null; // Nom du fichier uploadé
 
 const query = `
