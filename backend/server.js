@@ -176,6 +176,7 @@ const values = [
         res.status(500).send('Erreur interne du serveur');
     }
 });
+});
 // Route pour afficher les données de la base (admin uniquement)
 app.get('/api/database', (req, res) => {
     if (!req.session.loggedIn || req.session.role !== 'admin') {
