@@ -191,6 +191,8 @@ app.post('/api/submit', upload.single('file'), (req, res) => {
             fichier
         ];
 
+        console.log('Requête SQL :', query);
+        console.log('Valeurs SQL :', values);
         // Exécution de la requête SQL
         db.query(query, values, (err, result) => {
             if (err) {
