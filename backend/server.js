@@ -129,37 +129,67 @@ app.post('/logout', (req, res) => {
 
 // Route pour soumettre un formulaire
 app.post('/api/submit', upload.single('file'), (req, res) => {
-    const {
-        raison_sociale,
-        siret,
-        nom_prenom_gerant,
-        num,
-        mail,
-        pdl,
-        pce,
-        date_fin_engagement,
-        commentaires,
-        consommation_gaz,
-        consommation_electricite,
-        Commission
-    } = req.body;
+    try {
+        const {
+            raison_sociale,
+            siret,
+            nom_prenom_gerant,
+            num,
+            mail,
+            pdl,
+            pce,
+            date_fin_engagement,
+            commentaires,
+            consommation_gaz,
+            consommation_electricite,
+            Commission
+        } = req.body;
 
-const submitted_by = req.session.username; // Utilisateur connecté
-const fichier = req.file ? req.file.filename : null; // Nom du fichier uploadé
+        const submitted_by = req.session.username; // Utilisateur connecté
+        const fichier = req.file ? req.file.filename : null; // Nom du fichier uploadé
 
-const query = `
-    INSERT INTO employes (
-        raison_sociale, siret, nom_prenom_gerant, num, mail, pdl, pce, 
-        date_fin_engagement, commentaires, submitted_by, 
-        consommation_gaz, consommation_electricite, Commission, fichier
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-`;
+        // Vérifions les valeurs pour débogage
+        console.log('Données reçues :', {
+            raison_sociale,
+            siret,
+            nom_prenom_gerant,
+            num,
+            mail,
+            pdl,
+            pce,
+            date_fin_engagement,
+            commentaires,
+            consommation_gaz,
+            consommation_electricite,
+            Commission,
+            submitted_by,
+            fichier
+        });
 
-const values = [
-    raison_sociale, siret, nom_prenom_gerant, num, mail, pdl, pce,
-    date_fin_engagement, commentaires, submitted_by,
-    consommation_gaz, consommation_electricite, Commission, fichier
-];
+        const query = `
+            INSERT INTO employes (
+                raison_sociale, siret, nom_prenom_gerant, num, mail, pdl, pce, 
+                date_fin_engagement, commentaires, submitted_by, 
+                consommation_gaz, consommation_electricite, Commission, fichier
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `;
+
+        const values = [
+            raison_sociale,
+            siret,
+            nom_prenom_gerant,
+            num,
+            mail,
+            pdl,
+            pce,
+            date_fin_engagement,
+            commentaires,
+            submitted_by,
+            consommation_gaz,
+            consommation_electricite,
+            Commission,
+            fichier
+        ];
 
         // Exécution de la requête SQL
         db.query(query, values, (err, result) => {
@@ -175,7 +205,6 @@ const values = [
         console.error('Erreur dans le traitement du formulaire :', error);
         res.status(500).send('Erreur interne du serveur');
     }
-});
 });
 // Route pour afficher les données de la base (admin uniquement)
 app.get('/api/database', (req, res) => {
