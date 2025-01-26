@@ -145,7 +145,12 @@ app.post('/api/submit', upload.single('file'), (req, res) => {
             Commission
         } = req.body;
 
-        const submitted_by = req.session.username; // Utilisateur connecté
+        const submitted_by = req.session?.username;
+            if (!submitted_by) {
+                console.error('Erreur : L\'utilisateur connecté n\'est pas défini.');
+                return res.status(400).send('Erreur : Utilisateur non connecté.');
+            }
+
         const fichier = req.file ? req.file.filename : null; // Nom du fichier uploadé
 
         // Vérifions les valeurs pour débogage
