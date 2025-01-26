@@ -226,64 +226,81 @@ app.put('/api/update/:id', upload.single('file'), (req, res) => {
 
     const fichier = req.file ? req.file.filename : null;
 
-    const query = fichier
-        ? `
-            UPDATE employes
-            SET raison_sociale = ?, siret = ?, nom_prenom_gerant = ?, num = ?, mail = ?, 
-                pdl = ?, pce = ?, date_fin_engagement = ?, commentaires = ?, 
-                consommation_gaz = ?, consommation_electricite = ?, Commission = ?, fichier = ?
-            WHERE id = ?
-        `
-        : `
-            UPDATE employes
-            SET raison_sociale = ?, siret = ?, nom_prenom_gerant = ?, num = ?, mail = ?, 
-                pdl = ?, pce = ?, date_fin_engagement = ?, commentaires = ?, 
-                consommation_gaz = ?, consommation_electricite = ?, Commission = ?
-            WHERE id = ?
-        `;
-
-    const values = fichier
-        ? [
-            raison_sociale, siret, nom_prenom_gerant, num, mail, pdl, pce,
-            date_fin_engagement, commentaires,
-            consommation_gaz, consommation_electricite, Commission, fichier, id
-        ]
-        : [
-            raison_sociale, siret, nom_prenom_gerant, num, mail, pdl, pce,
-            date_fin_engagement, commentaires,
-            consommation_gaz, consommation_electricite, Commission, id
-        ];
-
- 
-
-    // Fetch the current data if date_fin_engagement is not provided
+    // Récupération des données existantes si nécessaire
     const fetchCurrentQuery = 'SELECT date_fin_engagement FROM employes WHERE id = ?';
     db.query(fetchCurrentQuery, [id], (fetchErr, fetchResults) => {
         if (fetchErr) {
+            console.error('Erreur lors de la récupération des données existantes', fetchErr);
             return res.status(500).send('Erreur lors de la récupération des données existantes');
         }
 
         const currentDateFinEngagement = fetchResults[0]?.date_fin_engagement || null;
         const updatedDateFinEngagement = date_fin_engagement || currentDateFinEngagement;
 
-        const query = `
-            UPDATE employes
-            SET raison_sociale = ?, siret = ?, nom_prenom_gerant = ?, num = ?, mail = ?, pdl = ?, pce = ?, date_fin_engagement = ?, commentaires = ?, consommation_gaz = ?, consommation_electricite = ?, Commission = ? 
-            WHERE id = ?
-        `;
-        const values = [raison_sociale, siret, nom_prenom_gerant, num, mail, pdl, pce, updatedDateFinEngagement, commentaires, consommation_gaz, consommation_electricite, Commission, id];
+        let query = '';
+        let values = [];
 
-      db.query(query, values, (err, result) => {
-        if (err) {
-            console.error('Erreur lors de la mise à jour des données :', err);
-            return res.status(500).send('Erreur lors de la mise à jour des données');
+        if (fichier) {
+            query = `
+                UPDATE employes
+                SET raison_sociale = ?, siret = ?, nom_prenom_gerant = ?, num = ?, mail = ?, 
+                    pdl = ?, pce = ?, date_fin_engagement = ?, commentaires = ?, 
+                    consommation_gaz = ?, consommation_electricite = ?, Commission = ?, fichier = ?
+                WHERE id = ?
+            `;
+            values = [
+                raison_sociale,
+                siret,
+                nom_prenom_gerant,
+                num,
+                mail,
+                pdl,
+                pce,
+                updatedDateFinEngagement,
+                commentaires,
+                consommation_gaz,
+                consommation_electricite,
+                Commission,
+                fichier,
+                id
+            ];
+        } else {
+            query = `
+                UPDATE employes
+                SET raison_sociale = ?, siret = ?, nom_prenom_gerant = ?, num = ?, mail = ?, 
+                    pdl = ?, pce = ?, date_fin_engagement = ?, commentaires = ?, 
+                    consommation_gaz = ?, consommation_electricite = ?, Commission = ?
+                WHERE id = ?
+            `;
+            values = [
+                raison_sociale,
+                siret,
+                nom_prenom_gerant,
+                num,
+                mail,
+                pdl,
+                pce,
+                updatedDateFinEngagement,
+                commentaires,
+                consommation_gaz,
+                consommation_electricite,
+                Commission,
+                id
+            ];
         }
 
-        console.log(`Données mises à jour pour l'ID ${id} :`, result);
-        res.status(200).send('Mise à jour réussie');
-    });
+        db.query(query, values, (err, result) => {
+            if (err) {
+                console.error('Erreur lors de la mise à jour des données :', err);
+                return res.status(500).send('Erreur lors de la mise à jour des données');
+            }
+
+            console.log(`Données mises à jour pour l'ID ${id}`);
+            res.status(200).send('Mise à jour réussie');
+        });
     });
 });
+
 // Route pour exporter les données en Excel
 app.get('/api/export-excel', (req, res) => {
     const query = 'SELECT * FROM employes';
