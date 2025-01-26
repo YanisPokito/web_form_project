@@ -47,36 +47,27 @@ const users = [
 ];
 const multer = require('multer');
 const fs = require('fs');
+const path = require('path');
 
-// Répertoire temporaire pour les uploads
-const uploadsDir = path.join('/tmp', 'uploads');
+// Répertoire cible
+const uploadDir = path.join(__dirname, 'uploads');
 
-// Vérifiez si le répertoire existe, sinon créez-le
-if (!fs.existsSync(uploadsDir)) {
-    fs.mkdirSync(uploadsDir);
-    console.log('Répertoire temporaire créé :', uploadsDir);
+// Vérifier si le répertoire existe, sinon le créer
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir);
 }
 
-// Configuration de l'upload avec Multer
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, uploadsDir); // Répertoire cible (correctement défini ici)
+        cb(null, uploadDir); // Répertoire cible
     },
     filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname)); // Nom unique pour chaque fichier
+        cb(null, Date.now() + '-' + file.originalname); // Nom unique pour chaque fichier
     }
 });
 
-const upload = multer({
-    storage: multer.diskStorage({
-        destination: (req, file, cb) => {
-            cb(null, 'uploads'); // Répertoire cible
-        },
-        filename: (req, file, cb) => {
-            cb(null, Date.now() + '-' + file.originalname); // Nom unique pour chaque fichier
-        }
-    })
-});
+const upload = multer({ storage });
+
 
 app.post(
     '/api/submit',
