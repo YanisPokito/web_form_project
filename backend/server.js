@@ -143,7 +143,7 @@ app.post('/api/submit', upload.single('file'), (req, res) => {
         consommation_electricite,
         Commission
     } = req.body;
-});
+
 const submitted_by = req.session.username; // Utilisateur connecté
 const fichier = req.file ? req.file.filename : null; // Nom du fichier uploadé
 
@@ -183,7 +183,7 @@ db.query(query, values, (err, result) => {
         console.log(`Formulaire soumis avec succès par : ${submitted_by}`);
         res.status(200).send('Formulaire soumis avec succès');
     });
-
+});
 
 // Route pour afficher les données de la base (admin uniquement)
 app.get('/api/database', (req, res) => {
