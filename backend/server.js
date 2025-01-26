@@ -221,8 +221,8 @@ app.get('/api/database', (req, res) => {
         return res.status(403).send('Accès interdit');
     }
 
-    const query2 = 'SELECT *, submitted_by FROM employes';
-    db.query2(query2, (err, results) => {
+    const query = 'SELECT *, submitted_by FROM employes';
+    db.query(query, (err, results) => {
         if (err) {
             return res.status(500).send('Erreur lors de la récupération des données');
         }
