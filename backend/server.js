@@ -206,12 +206,9 @@ app.get('/api/database', (req, res) => {
 
 
 // Route pour mettre à jour les données
-app.put('/api/update/:id', (req, res) => {
-    if (!req.session.loggedIn || req.session.role !== 'admin') {
-        return res.status(403).send('Non autorisé');
-    }
-
+app.put('/api/update/:id', upload.single('file'), (req, res) => {
     const id = req.params.id;
+
     const {
         raison_sociale,
         siret,
@@ -226,6 +223,38 @@ app.put('/api/update/:id', (req, res) => {
         consommation_electricite,
         Commission
     } = req.body;
+
+    const fichier = req.file ? req.file.filename : null;
+
+    const query = fichier
+        ? `
+            UPDATE employes
+            SET raison_sociale = ?, siret = ?, nom_prenom_gerant = ?, num = ?, mail = ?, 
+                pdl = ?, pce = ?, date_fin_engagement = ?, commentaires = ?, 
+                consommation_gaz = ?, consommation_electricite = ?, Commission = ?, fichier = ?
+            WHERE id = ?
+        `
+        : `
+            UPDATE employes
+            SET raison_sociale = ?, siret = ?, nom_prenom_gerant = ?, num = ?, mail = ?, 
+                pdl = ?, pce = ?, date_fin_engagement = ?, commentaires = ?, 
+                consommation_gaz = ?, consommation_electricite = ?, Commission = ?
+            WHERE id = ?
+        `;
+
+    const values = fichier
+        ? [
+            raison_sociale, siret, nom_prenom_gerant, num, mail, pdl, pce,
+            date_fin_engagement, commentaires,
+            consommation_gaz, consommation_electricite, Commission, fichier, id
+        ]
+        : [
+            raison_sociale, siret, nom_prenom_gerant, num, mail, pdl, pce,
+            date_fin_engagement, commentaires,
+            consommation_gaz, consommation_electricite, Commission, id
+        ];
+
+ 
 
     // Fetch the current data if date_fin_engagement is not provided
     const fetchCurrentQuery = 'SELECT date_fin_engagement FROM employes WHERE id = ?';
@@ -244,12 +273,14 @@ app.put('/api/update/:id', (req, res) => {
         `;
         const values = [raison_sociale, siret, nom_prenom_gerant, num, mail, pdl, pce, updatedDateFinEngagement, commentaires, consommation_gaz, consommation_electricite, Commission, id];
 
-        db.query(query, values, (err, result) => {
-            if (err) {
-                return res.status(500).send('Erreur lors de la mise à jour des données');
-            }
-            res.status(200).send('Mise à jour réussie');
-        });
+      db.query(query, values, (err, result) => {
+        if (err) {
+            console.error('Erreur lors de la mise à jour des données :', err);
+            return res.status(500).send('Erreur lors de la mise à jour des données');
+        }
+
+        console.log(`Données mises à jour pour l'ID ${id} :`, result);
+        res.status(200).send('Mise à jour réussie');
     });
 });
 // Route pour exporter les données en Excel
