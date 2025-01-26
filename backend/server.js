@@ -180,7 +180,7 @@ app.post('/api/submit', upload.single('file'), (req, res) => {
         }
         res.status(200).send('Données insérées avec succès');
     });
-});
+
 
 // Route pour afficher les données de la base (admin uniquement)
 app.get('/api/database', (req, res) => {
