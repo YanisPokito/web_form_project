@@ -128,12 +128,7 @@ app.post('/logout', (req, res) => {
 });
 
 // Route pour soumettre un formulaire
-app.post('/api/submit', upload.fields(), (req, res) => {
-    if (!req.session.loggedIn || req.session.role !== 'user') {
-        return res.status(403).send('Non autorisé');
-    }
-
-    // Récupérer les données depuis le formulaire
+app.post('/api/submit', upload.single('file'), (req, res) => {
     const {
         raison_sociale,
         siret,
@@ -149,35 +144,33 @@ app.post('/api/submit', upload.fields(), (req, res) => {
         Commission
     } = req.body;
 
-    // Récupérer le nom d'utilisateur depuis la session
-    const submitted_by = req.session.username; // Ajout de la variable manquante
+    const submitted_by = req.session.username; // Utilisateur connecté
+    const fichier = req.file ? req.file.filename : null; // Nom du fichier uploadé
 
-    // Récupérer le fichier uploadé
-    const fichier = req.file ? req.file.filename : null;
-
-    // Requête SQL pour insérer les données dans la base
     const query = `
-        INSERT INTO employes
-        (raison_sociale, siret, nom_prenom_gerant, num, mail, pdl, pce, date_fin_engagement, submitted_by, consommation_gaz, consommation_electricite, Commission, fichier, commentaires)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO employes (
+            raison_sociale, siret, nom_prenom_gerant, num, mail, pdl, pce, 
+            date_fin_engagement, commentaires, submitted_by, 
+            consommation_gaz, consommation_electricite, Commission, fichier
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
-
     const values = [
-        raison_sociale,
-        siret,
-        nom_prenom_gerant,
-        num,
-        mail,
-        pdl,
-        pce,
-        date_fin_engagement,
-        submitted_by,
-        consommation_gaz,
-        consommation_electricite,
-        Commission,
-        fichier,
-        commentaires
+        raison_sociale, siret, nom_prenom_gerant, num, mail, pdl, pce,
+        date_fin_engagement, commentaires, submitted_by,
+        consommation_gaz, consommation_electricite, Commission, fichier
     ];
+
+    db.query(query, values, (err, result) => {
+        if (err) {
+            console.error('Erreur lors de l\'insertion des données :', err);
+            return res.status(500).send('Erreur lors de l\'insertion des données');
+        }
+
+        console.log('Formulaire inséré avec succès :', result);
+        res.status(200).send('Formulaire soumis avec succès');
+    });
+});
+
 
     // Exécution de la requête SQL
     db.query(query, values, (err, result) => {
